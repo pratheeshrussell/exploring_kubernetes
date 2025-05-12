@@ -1,0 +1,59 @@
+apiVersion: pgv2.percona.com/v2
+kind: PerconaPGCluster
+metadata:
+  name: postgres-cluster
+  namespace: pg-cluster
+  # finalizers:
+  #  - percona.com/delete-pvc
+spec:
+  image: percona/percona-postgresql-operator:2.6.0-ppg17.4-postgres
+  postgresVersion: 17
+  users:
+    - name: postgres
+      databases:
+        - quotesdb
+      options: "SUPERUSER"
+      password:
+        type: AlphaNumeric
+      secretName: postgres-user-secret
+  # databaseInitSQL:
+  #   name: db-init-scripts # config map name
+  #   key: schema-quotes-init.sql # config map key
+  proxy:
+    pgBouncer:
+      replicas: 1
+      image: percona/percona-postgresql-operator:2.6.0-ppg17.4-pgbouncer1.24.0
+      exposeSuperusers: true
+  instances:
+    - name: instance1
+      replicas: 1
+      dataVolumeClaimSpec:
+        # volumeName: postgres-pv
+        storageClassName: standard
+        accessModes: 
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        
+  # pmm:
+  #   enabled: false
+  
+  backups:
+    pgbackrest:
+      image: percona/percona-postgresql-operator:2.6.0-ppg17.4-pgbackrest2.54.2
+      manual:
+        repoName: repo1
+        options:
+          - --type=full
+      repos:
+        - name: repo1
+          volume:
+            volumeClaimSpec:
+              # volumeName: postgres-backup-pv
+              storageClassName: standard   
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi

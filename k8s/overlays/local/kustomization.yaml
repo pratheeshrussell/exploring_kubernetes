@@ -1,0 +1,19 @@
+resources:
+  - sc.yaml
+  - ./postgres
+  - ./app
+  - ./pgadmin
+  - ./ingress/service.yaml
+  # - pv.yaml
+
+patches:
+  - target:
+      kind: PerconaPGCluster
+      name: postgres-cluster
+      namespace: pg-cluster
+    path: ./patches/pg-sc-patch.yaml
+  # - target:
+  #     kind: PerconaPGCluster
+  #     name: postgres-cluster
+  #     namespace: pg-cluster
+  #   path: ./patches/pg-pv-patch.yaml

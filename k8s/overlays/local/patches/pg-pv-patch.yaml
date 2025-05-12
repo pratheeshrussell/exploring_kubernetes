@@ -1,0 +1,9 @@
+- op: add
+  path: /spec/instances/0/dataVolumeClaimSpec/volumeName
+  value: postgres-pv
+
+- op: add
+  path: /spec/backups/pgbackrest/repos/0/volume/volumeClaimSpec/volumeName
+  value: postgres-backup-pv
+  
+  

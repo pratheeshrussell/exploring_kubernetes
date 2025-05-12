@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-quotes-db
+  namespace: pg-cluster
+spec:
+  template:
+    spec:
+      serviceAccountName: pg-password-editor
+      initContainers:
+        - name: patch-secret
+          image: bitnami/kubectl:latest
+          env:
+          - name: PG_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-update-secrets
+                key: PG_PASSWORD
+          command: ["/bin/sh", "-c", "/scripts/update-secret.sh"]
+          volumeMounts:
+            - name: script-volume
+              mountPath: /scripts
+      containers:
+        - name: psql
+          image: percona/percona-postgresql-operator:2.6.0-ppg17.4-postgres
+          env:
+          - name: PG_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-update-secrets
+                key: PG_PASSWORD
+          command: ["sh", "-c"]
+          args:
+            - >
+              psql "postgresql://postgres:${PG_ROOT_PASSWORD}@postgres-cluster-pgbouncer.pg-cluster.svc:5432/quotesdb" -f /init/schema-quotes-init.sql
+          volumeMounts:
+            - name: init-scripts
+              mountPath: /init
+      volumes:
+        - name: init-scripts
+          configMap:
+            name: db-init-scripts
+        - name: script-volume
+          configMap:
+            name: patch-script
+            defaultMode: 0755 # make script executable
+      restartPolicy: OnFailure
