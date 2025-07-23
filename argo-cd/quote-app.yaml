@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: Quotes-app
+  name: quotes-app
 spec:
   destination:
     namespace: demo-app
