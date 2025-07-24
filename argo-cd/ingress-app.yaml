@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: percona-operator
+  name: ingress-app
 spec:
   destination:
     namespace: ingress-nginx
