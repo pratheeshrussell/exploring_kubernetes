@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: percona-operator
+spec:
+  destination:
+    namespace: pg-operator
+    server: https://kubernetes.default.svc
+  source:
+    path: k8s/operators
+    repoURL: https://github.com/pratheeshrussell/exploring_kubernetes
+    targetRevision: argo-cd-setup
+  project: initializer
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  metadata:
+    annotations:
+      argocd.argoproj.io/sync-wave: '-1'
