@@ -1,2 +1,5 @@
 resources:
   - https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-wave: "-1"

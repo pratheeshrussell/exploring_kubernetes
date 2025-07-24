@@ -17,6 +17,3 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-  metadata:
-    annotations:
-      argocd.argoproj.io/sync-wave: '-1'

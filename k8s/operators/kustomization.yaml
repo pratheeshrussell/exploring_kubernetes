@@ -1,2 +1,5 @@
 resources:
   - https://raw.githubusercontent.com/percona/percona-postgresql-operator/v2.6.0/deploy/cw-bundle.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-wave: "-1"
