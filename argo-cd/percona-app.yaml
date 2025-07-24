@@ -10,7 +10,7 @@ spec:
     path: k8s/operators
     repoURL: https://github.com/pratheeshrussell/exploring_kubernetes
     targetRevision: argo-cd-setup
-  project: initializer
+  project: default
   syncPolicy:
     automated:
       prune: true
