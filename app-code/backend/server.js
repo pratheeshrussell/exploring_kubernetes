@@ -28,7 +28,11 @@ app.get('/api/quotes/random', async (req, res) => {
       ORDER BY RANDOM() 
       LIMIT 1
     `);
-    res.json(result.rows[0]);
+
+    const quote = result.rows[0];
+
+    console.log(`Quote fetched: ${JSON.stringify(quote)}`);
+    res.json(quote);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });

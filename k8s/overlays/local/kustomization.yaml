@@ -4,6 +4,7 @@ resources:
   - ./app
   - ./pgadmin
   - ./ingress/service.yaml
+  - ./observability
   # - pv.yaml
 
 patches:

@@ -1,0 +1,19 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+configMapGenerator:
+  - name: grafana-config
+    namespace: monitoring
+    files:
+      - configs/grafana.ini
+  - name: grafana-provisioning
+    namespace: monitoring
+    files:
+      - configs/datasources.yaml
+      - configs/dashboards.yaml
+  - name: grafana-dashboards
+    namespace: monitoring
+    files:
+      - configs/loki-logs-dashboard.json

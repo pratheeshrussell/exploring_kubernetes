@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: monitoring
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    # nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /grafana(/|$)(.*)
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 8080
