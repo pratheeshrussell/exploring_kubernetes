@@ -6,6 +6,14 @@ metadata:
 data:
   loki.yaml: |
     auth_enabled: false
+    limits_config:
+      retention_period: 30d
+
+    compactor:
+      working_directory: /tmp/loki/retention
+      retention_enabled: true
+      retention_delete_delay: 2h
+      delete_request_store: filesystem
 
     server:
       http_listen_port: 3100
