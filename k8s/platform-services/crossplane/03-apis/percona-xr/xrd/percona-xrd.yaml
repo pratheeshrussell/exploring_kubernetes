@@ -1,0 +1,39 @@
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: kube-postgres.platform.kube-postgres.com
+spec:
+  group: platform.kube-postgres.com
+  names:
+    kind: Kube-Postgres
+    plural: kube-postgres
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                namespace:
+                  type: string
+                  description: "Target namespace for the Postgres cluster"
+                  default: "default"
+                storage:
+                  type: string
+                  description: "Storage size for the database"
+                  default: "1Gi"
+                replicas:
+                  type: integer
+                  description: "Number of Postgres instances"
+                  default: 1
+                env:
+                  type: string
+                  description: "Deployment environment (e.g., dev, prod)"
+                  default: "dev"
+              required:
+                - storage

@@ -11,9 +11,9 @@ spec:
     namespace: pg-operator
     server: https://kubernetes.default.svc
   source:
-    path: k8s/operators
+    path: k8s/platform-services/operators
     repoURL: https://github.com/pratheeshrussell/exploring_kubernetes
-    targetRevision: argo-cd-setup
+    targetRevision: crossplane-setup
   project: default
   syncPolicy:
     automated:

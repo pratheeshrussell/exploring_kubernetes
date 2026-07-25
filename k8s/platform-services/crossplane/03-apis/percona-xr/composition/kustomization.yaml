@@ -1,0 +1,6 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - percona-composition.yaml
+  - dev-environment.yaml
+  - prod-environment.yaml

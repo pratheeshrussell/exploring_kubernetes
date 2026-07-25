@@ -11,9 +11,9 @@ spec:
     namespace: ingress-nginx
     server: https://kubernetes.default.svc
   source:
-    path: k8s/ingress
+    path: k8s/platform-services/ingress
     repoURL: https://github.com/pratheeshrussell/exploring_kubernetes
-    targetRevision: argo-cd-setup
+    targetRevision: crossplane-setup
   project: default
   syncPolicy:
     automated:

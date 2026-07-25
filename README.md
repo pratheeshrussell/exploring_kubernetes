@@ -26,13 +26,13 @@ kind load docker-image quote-backend --name kube-lab-cluster
 kind load docker-image nginx:alpine dpage/pgadmin4 bitnami/kubectl:latest percona/percona-postgresql-operator:2.6.0-ppg17.4-postgres percona/percona-postgresql-operator:2.6.0-ppg17.4-pgbackrest2.54.2 percona/percona-postgresql-operator:2.6.0-ppg17.4-pgbouncer1.24.0 --name kube-lab-cluster
 ```
 
-## Setup Percona Operator
+## Add Crossplane
+[Refer crossplane.md](k8s/platform-services/crossplane/crossplane.md)
 
-[Refer percona.md](k8s/operators/percona.md)
-
-## Add Ingress controller
-
-[Refer ingress.md](k8s/ingress/README.md)
+This uses a `bootstrap.sh` script to set up in three stages:
+1. `01-providers`: Installs the Helm Provider and Functions.
+2. `02-infrastructure`: Uses the Helm Provider to install Percona Operator, NGINX Ingress, and Argo CD.
+3. `03-apis`: Installs Custom APIs (XRDs and Compositions).
 
 ## Deploy the apps
 

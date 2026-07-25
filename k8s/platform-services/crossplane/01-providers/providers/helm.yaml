@@ -1,0 +1,9 @@
+# https://marketplace.upbound.io/providers/upbound/provider-helm/v1.3.1
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: upbound-provider-helm
+spec:
+  package: xpkg.upbound.io/upbound/provider-helm:v1.3.1
+  runtimeConfigRef:
+    name: provider-helm

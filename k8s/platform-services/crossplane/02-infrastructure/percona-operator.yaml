@@ -1,0 +1,15 @@
+apiVersion: helm.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: kube-pg-operator
+spec:
+  forProvider:
+    chart:
+      name: pg-operator
+      repository: https://percona.github.io/percona-helm-charts/
+      version: 2.6.0
+    namespace: pg-operator
+    values:
+      watchAllNamespaces: true
+  providerConfigRef:
+    name: default

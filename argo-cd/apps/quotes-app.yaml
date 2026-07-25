@@ -13,7 +13,7 @@ spec:
   source:
     path: k8s/overlays/local
     repoURL: https://github.com/pratheeshrussell/exploring_kubernetes
-    targetRevision: argo-cd-setup
+    targetRevision: crossplane-setup
   project: default
   syncPolicy:
     automated:

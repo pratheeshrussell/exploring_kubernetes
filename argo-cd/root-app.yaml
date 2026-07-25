@@ -11,7 +11,7 @@ spec:
   source:
     path: argo-cd/apps
     repoURL: https://github.com/pratheeshrussell/exploring_kubernetes
-    targetRevision: argo-cd-setup
+    targetRevision: crossplane-setup
   sources: []
   project: default
   syncPolicy:

@@ -1,6 +1,17 @@
 # Percona Postgres
 
-## Clusterwide setup
+## Setup
+
+### With helm 
+```sh
+helm repo add percona https://percona.github.io/percona-helm-charts/
+helm repo update
+
+helm install kube-pg-operator percona/pg-operator --version 2.6.0 --namespace pg-operator --create-namespace --set watchAllNamespaces=true
+```
+
+### With kubectl
+
 ```sh
 kubectl create namespace pg-operator
 # the namespace name is hardcoded in the yaml

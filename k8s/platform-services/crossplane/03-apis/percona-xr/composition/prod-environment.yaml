@@ -1,0 +1,12 @@
+apiVersion: apiextensions.crossplane.io/v1beta1
+kind: EnvironmentConfig
+metadata:
+  name: prod-environment
+  labels:
+    environment: prod
+    xrd: kube-postgres
+data:
+  postgresImage: percona/percona-postgresql-operator:2.6.0-ppg17.4-postgres
+  pgbouncerImage: percona/percona-postgresql-operator:2.6.0-ppg17.4-pgbouncer1.24.0
+  pgbackrestImage: percona/percona-postgresql-operator:2.6.0-ppg17.4-pgbackrest2.54.2
+  defaultStorageClass: premium-rwo # Different storage class for prod!

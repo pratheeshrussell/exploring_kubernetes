@@ -1,0 +1,111 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: percona.platform.kube-postgres.com
+spec:
+  compositeTypeRef:
+    apiVersion: platform.kube-postgres.com/v1alpha1
+    kind: Kube-Postgres
+  mode: Pipeline
+  pipeline:
+    - step: environment-configs
+      functionRef:
+        name: function-environment-configs
+      input:
+        apiVersion: envconfigs.fn.crossplane.io/v1beta1
+        kind: Input
+        spec:
+          environmentConfigs:
+            - type: Selector
+              selector:
+                matchLabels:
+                  - type: Value
+                    key: xrd
+                    value: kube-postgres
+            - type: Selector
+              selector:
+                matchLabels:
+                  - type: FromCompositeFieldPath
+                    key: environment
+                    valueFromFieldPath: spec.env
+    - step: patch-and-transform
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          - name: cluster
+            base:
+              apiVersion: pgv2.percona.com/v2
+              kind: PerconaPGCluster
+              metadata:
+                namespace: default
+              spec:
+                image: percona/percona-postgresql-operator:2.6.0-ppg17.4-postgres
+                postgresVersion: 17
+                users:
+                  - name: postgres
+                    databases:
+                      - quotesdb
+                    options: "SUPERUSER"
+                    password:
+                      type: AlphaNumeric
+                    secretName: postgres-user-secret
+                proxy:
+                  pgBouncer:
+                    replicas: 1
+                    image: percona/percona-postgresql-operator:2.6.0-ppg17.4-pgbouncer1.24.0
+                    exposeSuperusers: true
+                instances:
+                  - name: instance1
+                    replicas: 1
+                    dataVolumeClaimSpec:
+                      storageClassName: standard
+                      accessModes: 
+                        - ReadWriteOnce
+                      resources:
+                        requests:
+                          storage: 1Gi
+                backups:
+                  pgbackrest:
+                    image: percona/percona-postgresql-operator:2.6.0-ppg17.4-pgbackrest2.54.2
+                    manual:
+                      repoName: repo1
+                      options:
+                        - --type=full
+                    repos:
+                      - name: repo1
+                        volume:
+                          volumeClaimSpec:
+                            storageClassName: standard   
+                            accessModes:
+                              - ReadWriteOnce
+                            resources:
+                              requests:
+                                storage: 1Gi
+            patches:
+            # default type is FromCompositeFieldPath
+              - fromFieldPath: "spec.storage"
+                toFieldPath: "spec.instances[0].dataVolumeClaimSpec.resources.requests.storage"
+              - fromFieldPath: "spec.namespace"
+                toFieldPath: "metadata.namespace"
+              - fromFieldPath: "spec.replicas"
+                toFieldPath: "spec.instances[0].replicas"
+              - fromFieldPath: "metadata.name"
+                toFieldPath: "metadata.name"
+              - type: FromEnvironmentFieldPath
+                fromFieldPath: "postgresImage"
+                toFieldPath: "spec.image"
+              - type: FromEnvironmentFieldPath
+                fromFieldPath: "pgbouncerImage"
+                toFieldPath: "spec.proxy.pgBouncer.image"
+              - type: FromEnvironmentFieldPath
+                fromFieldPath: "pgbackrestImage"
+                toFieldPath: "spec.backups.pgbackrest.image"
+              - type: FromEnvironmentFieldPath
+                fromFieldPath: "defaultStorageClass"
+                toFieldPath: "spec.instances[0].dataVolumeClaimSpec.storageClassName"
+              - type: FromEnvironmentFieldPath
+                fromFieldPath: "defaultStorageClass"
+                toFieldPath: "spec.backups.pgbackrest.repos[0].volume.volumeClaimSpec.storageClassName"

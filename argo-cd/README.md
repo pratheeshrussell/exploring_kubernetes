@@ -1,6 +1,7 @@
 # Argo CD
 
-Install Argo CD
+## Setup
+
 ```
 kubectl create namespace argocd
 
